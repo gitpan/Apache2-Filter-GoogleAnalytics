@@ -13,7 +13,7 @@ name: Apache2-Filter-GoogleAnalytics
 provides:
   Apache2::Filter::GoogleAnalytics:
     file: lib/Apache2/Filter/GoogleAnalytics.pm
-    version: 1.00
+    version: 1.01
 requires:
   APR::Table: 0
   Apache2::Const: 0
@@ -23,4 +23,4 @@ requires:
   HTML::Parser: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 1.00
+version: 1.01

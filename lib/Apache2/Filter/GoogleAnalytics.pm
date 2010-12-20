@@ -41,7 +41,7 @@ use Apache2::RequestRec;
 use APR::Table;
 use Apache2::Const -compile => qw/OK/;
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 # Register an Apache directive
 Apache2::Module::add (__PACKAGE__, [{ name => 'WebPropertyID' }]);
@@ -109,11 +109,14 @@ sub handler
 	$parser->{filter} = $filter;
 
 	# If the GA ID is present, format the GA Code
+	# Only for HTML resources
 	my $config = Apache2::Module::get_config (__PACKAGE__,
 		$filter->r->server, $filter->r->per_dir_config);
 	$parser->{ga_code} = '';
 	$parser->{ga_code} = ga_script ($config->{'WebPropertyID'})
-		if exists $config->{'WebPropertyID'};
+		if exists $config->{'WebPropertyID'}
+		and ($filter->r->content_type () eq 'text/html'
+		or $filter->r->content_type () eq 'application/xhtml+xml');
 
 	# Extend the body length
 	if ($filter->r->headers_out->get ('Content-Length')) {
@@ -137,8 +140,6 @@ sub handler
 	return Apache2::Const::OK;
 }
 
-1;
-
 =head1 SEE ALSO
 
 L<HTML::Parser>, L<Apache2::Filter>.
@@ -151,3 +152,10 @@ under the same terms as Perl itself.
 =head1 AUTHOR
 
 Lubomir Rintel, C<< <lkundrak@v3.sk> >>
+
+The code is hosted on GitHub L<https://github.com/lkundrak/perl-Apache2-Filter-GoogleAnalytics>
+Bug fixes and feature enhancements are always welcome.
+
+=cut
+
+1;
